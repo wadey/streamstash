@@ -270,4 +270,17 @@ describe('goAuditParser', function () {
         result.data.proctitle.should.eql('nc -l 9999')
     })
 
+    it('should copy container information', function () {
+        var data = {"sequence":1188,"timestamp":"1473790050.668","messages":[{"type":1327,"data":"proctitle=6E63002D6C0039393939","containers":{"id":"123","pod_id":"abc123","name":"foo","pod_name":"foo-123-abc","namespace":"default"}}]},
+            result = StreamStash.parsers.goAuditParser.raw(JSON.stringify(data))
+
+        result.data.containers.should.eql({
+            "id": "123",
+            "pod_id": "abc123",
+            "name": "foo",
+            "pod_name": "foo-123-abc",
+            "namespace": "default"
+        })
+    })
+
 })
